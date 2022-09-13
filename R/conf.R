@@ -5,10 +5,14 @@
 ##' @param cutoff mesh spesific, min distance between points
 ##' @param cbound mesh spesific, size of boundary meshSimilar
 ##' @param meshSimilar If true we apply the same mesh as in the package spatitemporalIndices
+##' @param zone Zone used when converting to UTM coordinates
+##' @param readability If 1: Utilize age reading quality, if 0: Do not utilize age reading quality
 ##' @details defines the configurations
 ##' @return Configurations to set up the model
 ##' @export
-defConf_alk = function(years= NULL,maxAge, spatioTemporal = 1,rwBeta0 = 1, cutoff = 100,cbound = 200,meshSimilar = FALSE,zone = NULL){
+defConf_alk = function(years= NULL,maxAge, spatioTemporal = 1,rwBeta0 = 1, 
+                       cutoff = 100,cbound = 200,meshSimilar = FALSE,zone = NULL,
+                       readability = 1){
   conf = list()
   conf$maxAge = maxAge
   if(!is.null(zone)){
@@ -22,6 +26,7 @@ defConf_alk = function(years= NULL,maxAge, spatioTemporal = 1,rwBeta0 = 1, cutof
   conf$cbound = cbound
   conf$meshSimilar = meshSimilar
   conf$years = years
+  conf$readability = readability
   return(conf)
 }
 

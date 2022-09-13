@@ -10,6 +10,10 @@ setUpData_alk = function(d, conf_alk,conf_l = NULL){
   
   d = d[which(d$year %in%conf_alk$years),] 
   
+  if(conf_alk$readability==0){#Do not utilize age reading quality
+    d$readability[d$readability==5 | d$readability==6] = 1
+  }
+  
   d$ageNotTruncated = d$age
   d$age[d$age>conf_alk$maxAge] = conf_alk$maxAge
   ageRange = c(min(d$age), max(d$age))
