@@ -25,12 +25,21 @@ template <class Type>
     Type rho =2*invlogit(par.transRho_alk(0))-1;
     
     SparseMatrix<Type> Q = Q_spde(spdeMatricesST_alk,kappa);
-    SparseMatrix<Type> Q_age(nAges,nAges);
-    for(int a = 0; a< nAges; ++a){
+    SparseMatrix<Type> Q_age(nAges-1,nAges-1);
+    for(int a = 0; a< (nAges-1); ++a){
       Q_age.coeffRef(a,a)=1;
     }
     
     nll += SEPARABLE(GMRF(Q_age),SEPARABLE(AR1(rho),GMRF(Q)))(par.xST_alk); //Opposite order than on R side
+    
+    Type d = 2; //Part of spatial pc-prior
+    Type rhoP;
+    Type R = -log(dat.pcPriorsALKRange(1))*pow(dat.pcPriorsALKRange(0),d/2);
+    Type S = -log(dat.pcPriorsALKSD(1))/dat.pcPriorsALKSD(0);
+    if(dat.usePCpriorsALK==1){
+      rhoP = sqrt(8)/kappa;
+      nll -= log( d/2 * R *S * pow(rhoP,(-1-d/2))* exp(-R* pow(rhoP,(-d/2)) -S* sigma)); //pc-prior contribution
+    }
     
     Type scaleST = Type(1)/((4*3.14159265)*kappa*kappa); //No effect on results, but needed for interpreting the sigma^2 parameter as marginal variance. See section 2.1 in Lindgren (2011)
     
@@ -77,14 +86,14 @@ template <class Type>
         nll -= log(ALK(s,dat.age(s)- minAge));
         break;
       case 5:
-        if(dat.age(s) <(nAges-1)){
+        if(dat.ageNotTruncated(s) < dat.maxAge){
           nll -= log(ALK(s,dat.age(s)- minAge) + ALK(s,dat.age(s)- minAge + 1) );
         }else{
           nll -= log(ALK(s,dat.age(s)- minAge));
         }
         break;
       case 6:
-        if(dat.ageNotTruncated(s) < (nAges)){
+        if( (dat.ageNotTruncated(s) <= dat.maxAge) &  (dat.ageNotTruncated(s) >= dat.minAge) ){
           nll -= log(ALK(s,dat.age(s)- minAge) + ALK(s,dat.age(s)- minAge - 1) );
         }else{
           nll -= log(ALK(s,dat.age(s)- minAge));

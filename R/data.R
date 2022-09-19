@@ -16,6 +16,13 @@ setUpData_alk = function(d, conf_alk,conf_l = NULL){
   
   d$ageNotTruncated = d$age
   d$age[d$age>conf_alk$maxAge] = conf_alk$maxAge
+  
+  if(length(d$age<conf_alk$minAge)>0){
+    d$age[d$age<conf_alk$minAge] = conf_alk$minAge-1
+  }
+  d$age = d$age - min(d$age)+1 #First age is set to 1
+  
+  
   ageRange = c(min(d$age), max(d$age))
   nAge = ageRange[2]-ageRange[1] + 1
 
@@ -73,7 +80,12 @@ setUpData_alk = function(d, conf_alk,conf_l = NULL){
               idx1 = idx1,
               idx2 = idx2,
               ageRange = ageRange,
-              rwBeta0_alk = conf_alk$rwBeta0)
+              rwBeta0_alk = conf_alk$rwBeta0,
+              maxAge = conf_alk$maxAge,
+              minAge = conf_alk$minAge,
+              usePCpriorsALK = conf_alk$usePCpriorsALK,
+              pcPriorsALKRange = conf_alk$pcPriorsALKRange,
+              pcPriorsALKSD = conf_alk$pcPriorsALKSD)
   
   attributes(data)$uniqueYears = uniqueYears 
   attributes(data)$loc = loc 

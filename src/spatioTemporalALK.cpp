@@ -19,13 +19,18 @@ template<class Type>
   DATA_IVECTOR(ageNotTruncated); dataset.ageNotTruncated = ageNotTruncated;
   DATA_VECTOR(length); dataset.length = length;//Covariate
   DATA_IVECTOR(readability); dataset.readability = readability;
-  DATA_IVECTOR(ageRange);dataset.ageRange = ageRange;
+  DATA_IVECTOR(ageRange);dataset.ageRange = ageRange;  
   DATA_IVECTOR(idx1); dataset.idx1 = idx1;//Bookkeeping
   DATA_IVECTOR(idx2); dataset.idx2 = idx2;
   DATA_STRUCT(spdeMatricesST_alk,spde_t); //TODO: Include in dataset
   DATA_STRUCT(A_alk_list, LOSM_t); 
-  DATA_INTEGER(rwBeta0_alk); dataset.rwBeta0_alk = rwBeta0_alk;//Covariate
-  
+  DATA_INTEGER(rwBeta0_alk); dataset.rwBeta0_alk = rwBeta0_alk;
+  DATA_INTEGER(maxAge); dataset.maxAge = maxAge;
+  DATA_INTEGER(minAge); dataset.minAge = minAge;
+  DATA_VECTOR(pcPriorsALKRange); dataset.pcPriorsALKRange = pcPriorsALKRange;
+  DATA_VECTOR(pcPriorsALKSD); dataset.pcPriorsALKSD = pcPriorsALKSD;
+  DATA_INTEGER(usePCpriorsALK); dataset.usePCpriorsALK = usePCpriorsALK;
+   
   paraSet<Type> paraset; 
   PARAMETER_MATRIX(beta0_alk); paraset.beta0_alk = beta0_alk;//Intercepts
   PARAMETER_VECTOR(log_sigma_beta0_alk);paraset.log_sigma_beta0_alk = log_sigma_beta0_alk;      

@@ -31,6 +31,11 @@ struct dataSet{
   vector<int> idx1; 
   vector<int> idx2; 
   int rwBeta0_alk;
+  int maxAge;
+  int minAge;
+  int usePCpriorsALK;
+  vector<Type> pcPriorsALKRange; 
+  vector<Type> pcPriorsALKSD; 
 //  LOSM_t<Type> A_alk_list;
 
 };

@@ -8,7 +8,7 @@ defpar_alk = function(data, conf){
   
   nAge = data$ageRange[2]-data$ageRange[1] + 1
   
-  xST_alk = array(0.0, dim = c(dim(data$A_alk_list[[1]])[2],length(conf$years),conf$maxAge))
+  xST_alk = array(0.0, dim = c(dim(data$A_alk_list[[1]])[2],length(conf$years),nAge-1))
   
   par = list(beta0_alk = array(0,dim=c(length(conf$years),nAge-1)),
              log_sigma_beta0_alk = 0,

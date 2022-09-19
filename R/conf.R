@@ -10,10 +10,12 @@
 ##' @details defines the configurations
 ##' @return Configurations to set up the model
 ##' @export
-defConf_alk = function(years= NULL,maxAge, spatioTemporal = 1,rwBeta0 = 1, 
+defConf_alk = function(years= NULL,minAge,maxAge, spatioTemporal = 1,rwBeta0 = 1, 
                        cutoff = 100,cbound = 200,meshSimilar = FALSE,zone = NULL,
-                       readability = 1){
+                       readability = 1, 
+                       usePCpriorsALK = 1, pcPriorsALKRange = c(300,0.1), pcPriorsALKSD = c(1,0.1)){
   conf = list()
+  conf$minAge = minAge
   conf$maxAge = maxAge
   if(!is.null(zone)){
     conf$zone = zone
@@ -27,6 +29,10 @@ defConf_alk = function(years= NULL,maxAge, spatioTemporal = 1,rwBeta0 = 1,
   conf$meshSimilar = meshSimilar
   conf$years = years
   conf$readability = readability
+  conf$usePCpriorsALK = usePCpriorsALK
+  conf$pcPriorsALKRange = pcPriorsALKRange
+  conf$pcPriorsALKSD = pcPriorsALKSD
+  
   return(conf)
 }
 
