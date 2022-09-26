@@ -34,6 +34,8 @@ struct dataSet{
   int maxAge;
   int minAge;
   int usePCpriorsALK;
+  int spatioTemporalALK;
+  int spatialALK;
   vector<Type> pcPriorsALKRange; 
   vector<Type> pcPriorsALKSD; 
 //  LOSM_t<Type> A_alk_list;
@@ -50,5 +52,6 @@ struct paraSet{
   vector<Type> logKappa_alk; 
   vector<Type> transRho_alk; 
   array<Type> xST_alk; 
+  array<Type> xS_alk; 
   
 };

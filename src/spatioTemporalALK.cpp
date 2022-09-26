@@ -24,13 +24,16 @@ template<class Type>
   DATA_IVECTOR(idx2); dataset.idx2 = idx2;
   DATA_STRUCT(spdeMatricesST_alk,spde_t); //TODO: Include in dataset
   DATA_STRUCT(A_alk_list, LOSM_t); 
+  DATA_STRUCT(A_alk_obs, LOSM_t); 
   DATA_INTEGER(rwBeta0_alk); dataset.rwBeta0_alk = rwBeta0_alk;
   DATA_INTEGER(maxAge); dataset.maxAge = maxAge;
   DATA_INTEGER(minAge); dataset.minAge = minAge;
   DATA_VECTOR(pcPriorsALKRange); dataset.pcPriorsALKRange = pcPriorsALKRange;
   DATA_VECTOR(pcPriorsALKSD); dataset.pcPriorsALKSD = pcPriorsALKSD;
   DATA_INTEGER(usePCpriorsALK); dataset.usePCpriorsALK = usePCpriorsALK;
-   
+  DATA_INTEGER(spatioTemporalALK); dataset.spatioTemporalALK = spatioTemporalALK;
+  DATA_INTEGER(spatialALK); dataset.spatialALK = spatialALK;
+  
   paraSet<Type> paraset; 
   PARAMETER_MATRIX(beta0_alk); paraset.beta0_alk = beta0_alk;//Intercepts
   PARAMETER_VECTOR(log_sigma_beta0_alk);paraset.log_sigma_beta0_alk = log_sigma_beta0_alk;      
@@ -38,11 +41,12 @@ template<class Type>
   PARAMETER_VECTOR(logSigma_alk);paraset.logSigma_alk = logSigma_alk;
   PARAMETER_VECTOR(logKappa_alk);paraset.logKappa_alk = logKappa_alk;
   PARAMETER_VECTOR(transRho_alk);paraset.transRho_alk = transRho_alk;
+  PARAMETER_ARRAY(xS_alk); paraset.xS_alk = xS_alk;// Ordering: xST.col(age).col(year).col(spatial)
   PARAMETER_ARRAY(xST_alk); paraset.xST_alk = xST_alk;// Ordering: xST.col(age).col(year).col(spatial)
   
   
   Type nll = 0;
-  
+    
   nll += nllALK(dataset,paraset,spdeMatricesST_alk,A_alk_list); 
   
   

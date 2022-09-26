@@ -5,10 +5,17 @@ rm(list=ls())
 dataAge = readRDS("catch_at_age_data_ex_rus.rds")
 
 #TODO: do not care about distinguishing between aged less than min_age
-
+ 
 
 #Define configurations
-conf = defConf_alk(years = 1994:2020,maxAge = 10,spatioTemporal = 2,cutoff = 100, rwBeta0 = 1)
+conf = defConf_alk(years = 1994:2020,
+                   maxAge = 10,
+                   minAge = 3,
+                   spatioTemporal = 0,
+                   spatial = 1,
+                   cutoff = 120, 
+                   rwBeta0 = 1,
+                   readability = 1)
 
 #Set up data
 data = setUpData_alk(dataAge,conf)
@@ -22,6 +29,13 @@ run = fitALK(data,par,conf)
 endTime = Sys.time()
 endTime-startTime
 
+library(SparseM)
+rep <- sdreport(run$obj,getJointPrecision=T, ignore.parm.uncertainty =TRUE)
+nameIndex = which(colnames(rep$jointPrecision)=="xST_alk")
+Q = rep$jointPrecision[nameIndex,nameIndex]
+Q[Q!=0] = 1
+image(Q, main = "Sparsness structure of the precision matrix of the GMRF")
+mean(Q==0)
 
 run
 
