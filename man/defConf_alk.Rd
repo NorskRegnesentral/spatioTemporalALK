@@ -6,13 +6,19 @@
 \usage{
 defConf_alk(
   years = NULL,
+  minAge,
   maxAge,
-  spatioTemporal = 1,
+  spatioTemporal = 0,
+  spatial = 1,
   rwBeta0 = 1,
   cutoff = 100,
   cbound = 200,
   meshSimilar = FALSE,
-  zone = NULL
+  zone = NULL,
+  readability = 1,
+  usePCpriorsALK = 1,
+  pcPriorsALKRange = c(300, 0.1),
+  pcPriorsALKSD = c(1, 0.1)
 )
 }
 \arguments{
@@ -27,6 +33,10 @@ defConf_alk(
 \item{cbound}{mesh spesific, size of boundary meshSimilar}
 
 \item{meshSimilar}{If true we apply the same mesh as in the package spatitemporalIndices}
+
+\item{zone}{Zone used when converting to UTM coordinates}
+
+\item{readability}{If 1: Utilize age reading quality, if 0: Do not utilize age reading quality}
 }
 \value{
 Configurations to set up the model
