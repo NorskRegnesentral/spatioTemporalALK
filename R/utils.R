@@ -13,8 +13,8 @@ print.alk<-function(x, ...){
 ##' @details log likelihood of a ALK model run 
 ##' @export
 logLik.alk<-function(object, ...){
-  ret<- -object$opt$objective
-  attr(ret,"df")<-length(object$opt$par)
+  ret<- -object$opt$objective 
+  attr(ret,"df")<-length(object$opt$par) + length(object$pl$betaLength_alk)
   class(ret)<-"logLik"
   ret
 }
