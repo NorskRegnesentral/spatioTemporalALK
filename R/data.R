@@ -40,7 +40,7 @@ setUpData_alk = function(d, conf_alk,conf_l = NULL){
   names(loc) = c("X","Y")
   attr(loc, "projection") = "LL"
   attr(loc, "zone") = conf_alk$zone
-  ddpcr::quiet(locUTM <- PBSmapping::convUL(loc))
+  locUTM <- PBSmapping::convUL(loc)
   colnames(locUTM) = c("UTMX", "UTMY")
   
   if(conf_alk$meshSimilar){
