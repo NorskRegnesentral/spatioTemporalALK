@@ -87,7 +87,8 @@ setUpData_alk = function(d, conf_alk,conf_l = NULL){
               pcPriorsALKRange = conf_alk$pcPriorsALKRange,
               pcPriorsALKSD = conf_alk$pcPriorsALKSD,
               spatioTemporalALK = conf_alk$spatioTemporal,
-              spatialALK = conf_alk$spatial)
+              spatialALK = conf_alk$spatial,
+              betaLength = conf_alk$betaLength)
   
   attributes(data)$uniqueYears = uniqueYears 
   attributes(data)$loc = loc 

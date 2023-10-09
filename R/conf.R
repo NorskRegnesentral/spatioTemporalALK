@@ -10,7 +10,7 @@
 ##' @details defines the configurations
 ##' @return Configurations to set up the model
 ##' @export
-defConf_alk = function(years= NULL,minAge,maxAge, spatioTemporal = 0,spatial = 0,rwBeta0 = 1, 
+defConf_alk = function(years= NULL,minAge,maxAge, spatioTemporal = 0,spatial = 0,rwBeta0 = 1, betaLength = 1,
                        cutoff = 100,cbound = 200,meshSimilar = FALSE,zone = NULL,
                        readability = 1, 
                        usePCpriorsALK = 0, pcPriorsALKRange = c(300,0.1), pcPriorsALKSD = c(1,0.1)){
@@ -33,6 +33,7 @@ defConf_alk = function(years= NULL,minAge,maxAge, spatioTemporal = 0,spatial = 0
   conf$pcPriorsALKSD = pcPriorsALKSD
   conf$spatioTemporal = spatioTemporal
   conf$spatial = spatial
+  conf$betaLength= betaLength
   
   return(conf)
 }
@@ -69,7 +70,11 @@ setMap_alk = function(conf,par){
   map$logSigma_alk = as.factor(map$logSigma_alk)
   
   if(conf$rwBeta0==0){
-    map$log_sigma_beta0_alk = as.factor(NA)
+    map$log_sigma_beta_alk = as.factor(c(NA,NA))
+  }else{
+    if(conf$betaLength==1){
+      map$log_sigma_beta_alk = as.factor(c(1,NA))
+    }
   }
   return(map)
 }

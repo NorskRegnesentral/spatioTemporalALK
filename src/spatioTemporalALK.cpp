@@ -1,7 +1,9 @@
 #define TMB_LIB_INIT R_init_spatioTemporalALK
 
 #include <TMB.hpp>
+#include <cmath>
 using namespace tmbutils;
+
 #include "../inst/include/define.hpp"
 #include "../inst/include/alk.hpp"
  
@@ -33,10 +35,11 @@ template<class Type>
   DATA_INTEGER(usePCpriorsALK); dataset.usePCpriorsALK = usePCpriorsALK;
   DATA_INTEGER(spatioTemporalALK); dataset.spatioTemporalALK = spatioTemporalALK;
   DATA_INTEGER(spatialALK); dataset.spatialALK = spatialALK;
+  DATA_INTEGER(betaLength); dataset.betaLength = betaLength;
   
   paraSet<Type> paraset; 
   PARAMETER_MATRIX(beta0_alk); paraset.beta0_alk = beta0_alk;//Intercepts
-  PARAMETER_VECTOR(log_sigma_beta0_alk);paraset.log_sigma_beta0_alk = log_sigma_beta0_alk;      
+  PARAMETER_VECTOR(log_sigma_beta_alk);paraset.log_sigma_beta_alk = log_sigma_beta_alk;      
   PARAMETER_VECTOR(betaLength_alk); paraset.betaLength_alk = betaLength_alk;//Regression parameters
   PARAMETER_VECTOR(logSigma_alk);paraset.logSigma_alk = logSigma_alk;
   PARAMETER_VECTOR(logKappa_alk);paraset.logKappa_alk = logKappa_alk;

@@ -8,12 +8,13 @@ dataAge = readRDS("catch_at_age_data_ex_rus.rds")
  
 
 #Define configurations
-conf = defConf_alk(years = 1994:2020,
+conf = defConf_alk(years = 2015:2020,
                    maxAge = 10,
                    minAge = 3,
                    spatioTemporal = 0,
                    spatial = 1,
-                   cutoff = 120, 
+                   betaLength = 2,
+                   cutoff =80, cbound = 130, 
                    rwBeta0 = 1,
                    readability = 1)
 

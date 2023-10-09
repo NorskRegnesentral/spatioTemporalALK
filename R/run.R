@@ -9,18 +9,24 @@ fitALK = function(data,par, conf){
   
   map = setMap_alk(conf,par)
   
-  if(conf$spatioTemporal!=0){
-    if(conf$rwBeta0==0){
-      obj = MakeADFun(data,par,random = c("xST_alk","xS_alk"),profile = c("beta0_alk","betaLength_alk"),DLL = "spatioTemporalALK", map = map)
-    }else{
-      obj = MakeADFun(data,par,random = c("xST_alk", "beta0_alk","xS_alk"),profile = c("betaLength_alk"),DLL = "spatioTemporalALK", map = map)
+  random = c("xST_alk","xS_alk")
+  profile = numeric(0)
+  if(conf$rwBeta0==1){
+    random = c(random,"beta0_alk")
+    if(conf$betaLength == 2){
+      random = c(random,"betaLength_alk")
     }
-  }else{#Quick-fix, needs minimum 1 parameter which is not in "random" or "profile"
-    if(conf$rwBeta0==0){
-      obj = MakeADFun(data,par,random = c("xS_alk"),profile = c("beta0_alk","betaLength_alk"),DLL = "spatioTemporalALK", map = map)
-    }else{
-      obj = MakeADFun(data,par,random = c("xS_alk","beta0_alk"),profile = c("betaLength_alk"),DLL = "spatioTemporalALK", map = map)
-    }
+  }else{
+    profile = c("beta0_alk","betaLength_alk")
+  }
+  if(conf$spatioTemporal==0 & conf$spatial ==0 & conf$rwBeta0==0){
+    profile = c("beta0_alk") #Need one parameter that is not profiled
+  }
+  
+  if(length(profile)>0){
+    obj = MakeADFun(data,par,random = random,profile = profile,DLL = "spatioTemporalALK", map = map)
+  }else{
+    obj = MakeADFun(data,par,random = random,DLL = "spatioTemporalALK", map = map)
   }
   opt = nlminb(obj$par,obj$fn,obj$gr, control = list(trace = 1, iter.max = 1000, eval.max =1000))
   

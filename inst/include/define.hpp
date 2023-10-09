@@ -36,6 +36,7 @@ struct dataSet{
   int usePCpriorsALK;
   int spatioTemporalALK;
   int spatialALK;
+  int betaLength;
   vector<Type> pcPriorsALKRange; 
   vector<Type> pcPriorsALKSD; 
 //  LOSM_t<Type> A_alk_list;
@@ -46,7 +47,7 @@ struct dataSet{
 template <class Type>
 struct paraSet{
   matrix<Type> beta0_alk; 
-  vector<Type> log_sigma_beta0_alk;
+  vector<Type> log_sigma_beta_alk;
   vector<Type> betaLength_alk; 
   vector<Type> logSigma_alk; 
   vector<Type> logKappa_alk; 
