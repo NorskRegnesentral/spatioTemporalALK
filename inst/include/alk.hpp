@@ -3,7 +3,7 @@ using namespace density; //use GMRF
 using namespace Eigen; //Utilize sparse structures
 
 template <class Type>
-  Type nllALK(dataSet<Type> dat, paraSet<Type> par, spde_t<Type> spdeMatricesST_alk, LOSM_t<Type> A_alk_list){
+  Type nllALK(dataSet<Type> dat, paraSet<Type> par, spde_t<Type> spdeMatricesST_alk, LOSM_t<Type> A_alk_list, data_indicator<vector<Type>,Type> keep, objective_function<Type> *of){
     
     Type nll = 0;
     
@@ -77,8 +77,8 @@ template <class Type>
       }
     }
     
-    Type scaleS = Type(1)/((4*3.14159265)*kappa(0)*kappa(0)); //No effect on results, but needed for interpreting the sigma^2 parameter as marginal variance. See section 2.1 in Lindgren (2011)
-    Type scaleST = Type(1)/((4*3.14159265)*kappa(1)*kappa(1)); //No effect on results, but needed for interpreting the sigma^2 parameter as marginal variance. See section 2.1 in Lindgren (2011)
+    Type scaleS = Type(1)/((4*M_PI)*kappa(0)*kappa(0)); //No effect on results, but needed for interpreting the sigma^2 parameter as marginal variance. See section 2.1 in Lindgren (2011)
+    Type scaleST = Type(1)/((4*M_PI)*kappa(1)*kappa(1)); //No effect on results, but needed for interpreting the sigma^2 parameter as marginal variance. See section 2.1 in Lindgren (2011)
     
     matrix<Type> linPredMatrix(nObs, nAges-1);
     linPredMatrix.setZero(); 
@@ -107,42 +107,96 @@ template <class Type>
     ALK.setZero();
     
     vector<Type> tmp;
-    vector<Type> probLess = ALK.col(0) ;
+    vector<Type> probLessVec = ALK.col(0) ;
     for(int a = 0; a<nAges; ++a){
-      probLess.setZero();
+      probLessVec.setZero();
       for(int b = 0; b <a; ++b ){
         tmp = ALK.col(b);
-        probLess = probLess + tmp;
+        probLessVec = probLessVec + tmp;
       }
       if(a <(nAges-1)){
         tmp = linPredMatrix.col(a);
-        ALK.col(a) = invlogit(tmp)*(1-probLess);
+        ALK.col(a) = invlogit(tmp)*(1-probLessVec);
       }else{
-        ALK.col(nAges-1) = (1-probLess);
+        ALK.col(nAges-1) = (1-probLessVec);
       }
     }
     
-    for(int s = 0; s<nObs; ++s){
+    for(int s=0; s<nObs; ++s){
+      Type probLess = 0;
+      Type prob;
+      Type cdf = 0;
+      Type cdfNext = 0;
+      Type probPrevious = 0;
+      Type probNext = 0;
+      
+      for(int a = 1; a<=dat.age(s); ++a){
+        if(a != nAges){
+          prob = invlogit(linPredMatrix(s,a-1));
+          prob = prob*(1-probLess);
+          if(a != dat.age(s)){
+            probLess = probLess + prob;
+          }
+          cdf = probLess + prob;
+          if(a==dat.age(s)){
+            //set up integration and probability for readability 5 and 6
+            if(a==(nAges-1)){
+              probNext = 1-probLess-prob;
+              cdfNext = 1;
+            }else{
+              probNext = invlogit(linPredMatrix(s,a));
+              probNext = probNext*(1-probLess-prob);
+              cdfNext = probLess + prob + probNext;
+            }
+          }else{
+            probPrevious = prob;
+          }
+        }else{
+          cdf = 1;
+        }
+      }
+      cdf = squeeze(cdf);
+      
       switch(dat.readability(s)){
       case 1:
-        nll -= log(ALK(s,dat.age(s)- minAge));
+          if(dat.age(s)<nAges){
+            nll -= keep(s)*log(prob);
+          }else{
+            nll -= keep(s)*log(1-probLess);
+          }
+          nll -= keep.cdf_lower(s) * log(cdf );
+          nll -= keep.cdf_upper(s) * log(1.0 - cdf);
         break;
       case 5:
         if(dat.ageNotTruncated(s) < dat.maxAge){
-          nll -= log(ALK(s,dat.age(s)- minAge) + ALK(s,dat.age(s)- minAge + 1) );
+          nll -= keep(s)*log(prob + probNext);
+          nll -= keep.cdf_lower(s) * log(cdfNext);
+          nll -= keep.cdf_upper(s) * log(1.0 - cdfNext);
         }else{
-          nll -= log(ALK(s,dat.age(s)- minAge));
+          nll -= keep(s)*log(1-probLess);
+          nll -= keep.cdf_lower(s) * log(cdf );
+          nll -= keep.cdf_upper(s) * log(1.0 - cdf);
         }
         break;
       case 6:
         if( (dat.ageNotTruncated(s) <= dat.maxAge) &  (dat.ageNotTruncated(s) >= dat.minAge) ){
-          nll -= log(ALK(s,dat.age(s)- minAge) + ALK(s,dat.age(s)- minAge - 1) );
+          nll -= keep(s)*log(prob + probPrevious);
+          nll -= keep.cdf_lower(s) * log(cdf );
+          nll -= keep.cdf_upper(s) * log(1.0 - cdf);
         }else{
-          nll -= log(ALK(s,dat.age(s)- minAge));
+          if(dat.age(s)<nAges){
+            nll -= keep(s)*log(prob);
+          }else{
+            nll -= keep(s)*log(1-probLess);
+          }
+          nll -= keep.cdf_lower(s) * log(cdf );
+          nll -= keep.cdf_upper(s) * log(1.0 - cdf);
         }
         break;
       }
-    } 
+    }
+    
+    REPORT_F(ALK, of);
     
     return(nll);
   }

@@ -15,6 +15,8 @@ fitALK = function(data,par, conf){
     random = c(random,"beta0_alk")
     if(conf$betaLength == 2){
       random = c(random,"betaLength_alk")
+    }else{
+      profile = c("betaLength_alk")
     }
   }else{
     profile = c("beta0_alk","betaLength_alk")

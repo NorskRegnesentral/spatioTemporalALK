@@ -13,9 +13,6 @@ plotALK(run, year, length = NULL, age = NULL, ...)
 
 \item{length}{if != NULL, plot spatial ALK based on length and year}
 }
-\value{
-
-}
 \description{
 Plot ALK
 }

@@ -14,6 +14,23 @@ struct LOSM_t : vector<SparseMatrix<Type> > {
 };
 
 
+
+#define ADREPORT_F(name,F) F->reportvector.push(name,#name);
+
+#define SIMULATE_F(F)				\
+if(isDouble<Type>::value && F->do_simulate)
+
+
+#define REPORT_F(name,F)					                               \
+if(isDouble<Type>::value && F->current_parallel_region<0) {	\
+  Rf_defineVar(Rf_install(#name),					                      \
+               PROTECT(asSEXP(name)),F->report);			         \
+  UNPROTECT(1);						                                       \
+}
+
+
+
+
 template <class Type>
   struct dataSet;
 
@@ -23,7 +40,7 @@ template <class Type>
 
 template <class Type>
 struct dataSet{
-  vector<int> age; 
+  vector<Type> age; 
   vector<int> ageNotTruncated; 
   vector<Type> length; 
   vector<int> readability; 

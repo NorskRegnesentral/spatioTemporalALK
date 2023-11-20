@@ -17,7 +17,7 @@ template<class Type>
   using namespace R_inla; //includes SPDE-spesific functions, e.g. Q_spde() 
   
   dataSet<Type> dataset;  
-  DATA_IVECTOR(age); dataset.age = age;//The response
+  DATA_VECTOR(age); dataset.age = age;//The response
   DATA_IVECTOR(ageNotTruncated); dataset.ageNotTruncated = ageNotTruncated;
   DATA_VECTOR(length); dataset.length = length;//Covariate
   DATA_IVECTOR(readability); dataset.readability = readability;
@@ -36,6 +36,7 @@ template<class Type>
   DATA_INTEGER(spatioTemporalALK); dataset.spatioTemporalALK = spatioTemporalALK;
   DATA_INTEGER(spatialALK); dataset.spatialALK = spatialALK;
   DATA_INTEGER(betaLength); dataset.betaLength = betaLength;
+  DATA_VECTOR_INDICATOR(keep,age);
   
   paraSet<Type> paraset; 
   PARAMETER_MATRIX(beta0_alk); paraset.beta0_alk = beta0_alk;//Intercepts
@@ -50,7 +51,7 @@ template<class Type>
   
   Type nll = 0;
     
-  nll += nllALK(dataset,paraset,spdeMatricesST_alk,A_alk_list); 
+  nll += nllALK(dataset,paraset,spdeMatricesST_alk,A_alk_list, keep, this); 
   
   
   return nll;

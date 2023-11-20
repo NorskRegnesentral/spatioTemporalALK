@@ -9,14 +9,14 @@ defConf_alk(
   minAge,
   maxAge,
   spatioTemporal = 0,
-  spatial = 1,
+  spatial = 0,
   rwBeta0 = 1,
   cutoff = 100,
   cbound = 200,
   meshSimilar = FALSE,
   zone = NULL,
   readability = 1,
-  usePCpriorsALK = 1,
+  usePCpriorsALK = 0,
   pcPriorsALKRange = c(300, 0.1),
   pcPriorsALKSD = c(1, 0.1)
 )
