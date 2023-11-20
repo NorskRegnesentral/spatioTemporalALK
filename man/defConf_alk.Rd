@@ -11,6 +11,7 @@ defConf_alk(
   spatioTemporal = 0,
   spatial = 0,
   rwBeta0 = 1,
+  betaLength = 1,
   cutoff = 100,
   cbound = 200,
   meshSimilar = FALSE,

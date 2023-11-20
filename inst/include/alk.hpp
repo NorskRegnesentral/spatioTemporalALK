@@ -31,18 +31,18 @@ template <class Type>
         nll -= dnorm(par.betaLength_alk((dat.idx1.size()-1)*(nAges-1) + 0),par.betaLength_alk((dat.idx1.size()-2)*(nAges-1) + 0),sigma_beta_alk(1),true); //random walk for youngest age in last year
       }
     }else{
-      for(int y=0;y<dat.idx1.size();y++){
-        for(int a=0; a<(nAges-1); ++a){
-          nll -= dnorm(par.beta0_alk(y,a),Type(0),Type(50),true); //Penalization, often needed for convergence
-        }
-      }
-      if(dat.betaLength==2){
-        for(int y=0;y<dat.idx1.size();y++){
-          for(int a=0; a<(nAges-1); ++a){
-            nll -= dnorm(par.betaLength_alk(y*(nAges-1) + a),Type(0),Type(50),true);//Penalization, often needed for convergence
-          }
-        }
-      }
+//      for(int y=0;y<dat.idx1.size();y++){
+//        for(int a=0; a<(nAges-1); ++a){
+//          nll -= dnorm(par.beta0_alk(y,a),Type(0),Type(50),true); //Penalization, often needed for convergence
+//        }
+//      }
+//      if(dat.betaLength==2){
+//        for(int y=0;y<dat.idx1.size();y++){
+//          for(int a=0; a<(nAges-1); ++a){
+//            nll -= dnorm(par.betaLength_alk(y*(nAges-1) + a),Type(0),Type(50),true);//Penalization, often needed for convergence
+//          }
+//        }
+//      }
     }
     
     vector<Type> sigma =exp(par.logSigma_alk);
@@ -156,6 +156,7 @@ template <class Type>
         }
       }
       cdf = squeeze(cdf);
+      cdfNext = squeeze(cdfNext);
       
       switch(dat.readability(s)){
       case 1:
