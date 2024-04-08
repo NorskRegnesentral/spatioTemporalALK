@@ -1,11 +1,11 @@
 Package: spatioTemporalALK
 Type: Package
-Title: What the Package Does (Title Case)
+Title: spatioTemporalALK
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Author: Olav Nikolai Ridal Breivik
+Maintainer: The package maintainer <olavbr@nr.no>
+Description: In this package we estimate age-at-length keys with use of a spatio-temporal continuation ratio logit model. 
+    The intended use of the model is to combine it with a spatio-temporal model for abundance-at-length to create abundance indices-at-age that accomondate for uncertinaty arising from both sub-model.
 License: What license is it under?
 Depends: TMB, INLA
 LinkingTo: TMB, RcppEigen
