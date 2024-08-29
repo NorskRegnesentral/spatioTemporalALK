@@ -14,7 +14,15 @@ print.alk<-function(x, ...){
 ##' @export
 logLik.alk<-function(object, ...){
   ret<- -object$opt$objective 
-  attr(ret,"df")<-length(object$opt$par) + length(object$pl$betaLength_alk)
+  
+  beta0 = 0
+  if(object$conf$rwBeta0==0){
+    beta0 = beta0+ length(object$conf$minAge:object$conf$maxAge )*length(object$conf$years)
+  }else{
+    beta0 = beta0+ length(object$conf$minAge:object$conf$maxAge) + length(object$conf$years) -1
+  }
+  
+  attr(ret,"df")<-length(object$opt$par) + length(object$pl$betaLength_alk) + beta0
   class(ret)<-"logLik"
   ret
 }
